@@ -1,0 +1,14 @@
+[project]
+name = "docs"
+version = "0.0.0"
+description = "Docs for project potos"
+requires-python = ">=3.12"
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "zensical>=0.0.45",
+]
+
+[tool.uv]
+package = false
