@@ -5,43 +5,33 @@ icon: lucide/rocket
 # Quickstart Guide
 
 ## Install system dependencies
-## Installing uv
-The main build tool used by the Potos iso builder project is uv.
-It is recomandet to install it system-wide.
-
-Follow the [offical uv installation guide](https://docs.astral.sh/uv/getting-started/installation) or if running on fedora install it with:
-```bash
-sudo dnf install uv
-```
-
-## Installing docker
+### Installing docker
 
 Follow the [offical docker installation guide](https://docs.docker.com/engine/install) and add your user to the docker group.
 
-## Installing libvirt
+### Installing libvirt
+This is only needed for bootstraping and testing the iso installation in a VM
+=== "Fedora"
 
+    ```bash
+    sudo dnf install libvirt virt-manager edk2-ovmf -y
+    ```
+=== "Debian"
+    ```bash
+    sudo apt install -y qemu-system libvirt-daemon-system virt-manager ovmf
+    ```
 
 ## Clone project
 ```bash
 git clone https://github.com/projectpotos/potos-iso-builder.git
 ```
 ```bash
-potos-iso-builder.git
-```
-```bash
-(cd tests/; mv output output.bak; ln -s ../output .)
+cd potos-iso-builder
 ```
 
-## Install local project dependencies
-```bash
-uv sync
-```
-```bash
-uvx --from go-task-bin task
-```
-```bash
-uv tool install virt-firmware
-```
+## Install build dependencies
+The main build tool used by the Potos iso is go-task.
+It can be installed follow the [offical installation guide](https://taskfile.dev/docs/installation) 
 
 ## Preparing minimal Potos config
 Copy the example configuration
@@ -51,7 +41,7 @@ cp examples/minimal/config.yml input
 ```
 
 ### Set keyboard layout
-Set a keyboard layout in input/config.yml that the iso unstallation runs automatically trough
+Set a keyboard layout in `input/config.yml` so that the iso unstallation runs automatically trough
 ```yaml
 locale:
   lang: "en_US.UTF-8"
@@ -64,7 +54,7 @@ Generate a password for the potos admin user
 ```bash
 openssl passwd -6
 ```
-Replace password_hash in input/config.yml
+Replace password_hash in `input/config.yml`
 ```yaml
 initial_user:
   username: "admin"
@@ -72,10 +62,18 @@ initial_user:
 ```
 
 ## Build minimal Potos iso
-```bash
-uvx --from go-task-bin task build
-```
+The Potos installation-iso will be created at the path `tests/output/potos-installer.iso` using this command:
 
 ```bash
-uvx --from go-task-bin task test:bootstrap
+OUTPUT_DIR=tests/output task build
 ```
+
+A installation into a vm can be started with the this command:
+
+```bash
+task test:bootstrap
+```
+
+!!! note
+
+    In case `ERROR Unknown OS name` is show check the output of `virt-install --osinfo list | grep fedora` and replace the `OS_VARIANT` value in `tests/scripts/bootstrap.sh` with an available option e.g. `OS_VARIANT="fedora-unknown"`
