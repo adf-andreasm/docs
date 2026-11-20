@@ -11,7 +11,7 @@ There are three repositories in place that allow tho manage the clients via git.
 
 3. [The Specs repository](https://github.com/projectpotos/ansible-specs-fedora-test) contains the actual configuration and specifications for a particular Potos Linux client deployment. It is the configuration layer that connects the base collection management with the roles provided by the Potos roles collection. The specs repo can be private or public. Create and host your own copy of the exemple specs repository.
   
-## Extend configuration
+## Extend Configuration
 In the `input/config.yml` add the uri and branch for the base collection.
 
 ```yaml
@@ -68,7 +68,7 @@ Then build a new iso using this `input/config.yml` and install it in a vm as des
 When you first login into the freshly installed client, a dialog will ask you the enter your access token for the specs repository.
 It is stored to `/etc/potos/potos_specs_token.cred` and can be modiefied later. The specs repository's uri and branch are stored to `/etc/potos/config.yml`.
 
-## Test the ansible pull
+## Test the Ansible Pull
 To test if everything is setup correctly, run the following ansible pull command.
 
 ```bash
