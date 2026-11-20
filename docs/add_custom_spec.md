@@ -3,63 +3,74 @@ icon: lucide/rocket
 ---
 
 # Add custom specs repo
-There are three repos in place that allow tho manage the clients via git.
+There are three repositories in place that allow tho manage the clients via git.
 
-1. [The ansible base collection](https://github.com/projectpotos/ansible-collection-potos.base.git) contains role for the first enrollmend and setting up managment triggers. 
+1. [The Ansible base collection](https://github.com/projectpotos/ansible-collection-potos.base.git) contains everything required for initial enrollment and the configuration of management triggers. The collection is publicly available on GitHub and can be used directly from the upstream repository, without requiring any modifications.
   
-2. [The ansible potos roles collection](https://github.com/projectpotos/ansible-collection-potos.roles.git) contains roles that allow the configuration of the clients
-  
-3. [The specs repo](https://github.com/projectpotos/ansible-specs-fedora-test) that is triggert by via the base collection managment and holds the actual host configuration in the group and host vars and deploys it using roles from potos roles collection
+2. [The ansible potos roles collection](https://github.com/projectpotos/ansible-collection-potos.roles.git) provides a set of Ansible roles that simplify the management of Potos Linux clients. The collection is publicly available on GitHub and can be used directly from its upstream repository.
+
+3. [The Specs repository](https://github.com/projectpotos/ansible-specs-fedora-test) contains the actual configuration and specifications for a particular Potos Linux client deployment. It is the configuration layer that connects the base collection management with the roles provided by the Potos roles collection. The specs repo can be private or public. Create and host your own copy of the exemple specs repository.
   
 ## Extend configuration
-In the `input/config.yml` add the uri for the base collection.
+In the `input/config.yml` add the uri and branch for the base collection.
 
 ```yaml
 collection_source: git+https://github.com/projectpotos/ansible-collection-potos.base.git,main
 ```
 
-Modify the spec repo information 
+Modify the specs repo information in `input/config.yml` adding the uri and branch for your copy of the specs repository.
 
 ```yaml
 specs:
-  url: https://git.organisation.com/something/specs-repo.git
+  url: https://git.your-organisation.com/something/specs-repo.git
   branch: main
 ```
 
-Prepare the spec repo tocken credential
-
-```yaml
-credentials:
-  specs_token:
-    backend: systemd-creds
-    name: specs_token
-    path: /etc/potos/specs_token.cred
-```
-
-Build a new iso using this configuration and install it in a vm
-
-
-## Setup the ansible pull
-On an installed client the access tocken for the specs repo has to be added as follows.
-
-Change the credential setting in the potos configuration 
+In case that your specs repo is not publicly available, adiddtional configuration for a access token is needed.
+First create an access token with Scope "read_repository" and Role "Reporter"
+Then modify the `input/config.yml` as follows.
 
 ```yaml
 credentials:
   specs_token:
     backend: file
-    path: /etc/potos/potos_specs_token.cred
     name: specs_token
-````
+    path: /etc/potos/potos_specs_token.cred
 
-Write the access token to the file
+firstboot:
+  on_success: logout
+  firstboot:
+    steps:
+      - id: set_hostname
+        uses: hostname/change
+        input:
+          ask: true
+      - id: enter_specs_token
+        uses: prompt/ask
+        input:
+          text: "Enter you specs repo token"
+          fields:
+            - label: Token
+          validations:
+            - type: required
+              field: Token
+              error_message: Please enter the Token.
+      - id: write_specs_token
+        uses: file/write
+        input:
+          path: /etc/potos/potos_specs_token.cred
+          mode: 0600
+          content: "{{ steps.enter_specs_token.value }}"
+          secret: true
+```
+
+Then build a new iso using this configuration and install it in a vm as described in [Quickstart Guide](quickstart.md).
+When you first login into the freshly installed client, a dialog will ask you the enter your access token for the specs repository.
+It is stored to `/etc/potos/potos_specs_token.cred` and can be modiefied later. The specs repository's uri and branch are stored to `/etc/potos/config.yml`.
+
+## Test the ansible pull
+To test if everything is setup correctly, run the following ansible pull command.
 
 ```bash
-echo -n 'glpat-...' > /etc/potos/potos_specs_token.cred
-```
-
-The the ansible pull
-
-```
 potos-ansible-pull -r daily -v
 ```
