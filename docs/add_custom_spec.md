@@ -2,7 +2,7 @@
 icon: lucide/rocket
 ---
 
-# Add custom specs repo
+# Add custom Specs Repository
 There are three repositories in place that allow tho manage the clients via git.
 
 1. [The Ansible base collection](https://github.com/projectpotos/ansible-collection-potos.base.git) contains everything required for initial enrollment and the configuration of management triggers. The collection is publicly available on GitHub and can be used directly from the upstream repository, without requiring any modifications.
