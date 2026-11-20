@@ -27,7 +27,7 @@ specs:
 ```
 
 In case that your specs repo is not publicly available, adiddtional configuration for a access token is needed.
-First create an access token with Scope "read_repository" and Role "Reporter"
+First create an access token with Scope `read_repository` and Role `Reporter`.
 Then modify the `input/config.yml` as follows.
 
 ```yaml
@@ -64,7 +64,7 @@ firstboot:
           secret: true
 ```
 
-Then build a new iso using this configuration and install it in a vm as described in [Quickstart Guide](quickstart.md).
+Then build a new iso using this `input/config.yml` and install it in a vm as described in [Quickstart Guide](quickstart.md).
 When you first login into the freshly installed client, a dialog will ask you the enter your access token for the specs repository.
 It is stored to `/etc/potos/potos_specs_token.cred` and can be modiefied later. The specs repository's uri and branch are stored to `/etc/potos/config.yml`.
 
