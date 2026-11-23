@@ -6,9 +6,9 @@ icon: lucide/rocket
 The minimal Specs Repository can be cloned from [GitHub](https://github.com/projectpotos/ansible-specs-fedora-test).
 Refer to [Add custom Specs Repository](add_custom_spec.md) for information on how  to intagrate it into the potos client.
 
-* The `runtime.yml` specifies what roles are run `hourly` and `daily` by the trigers managed by the potos base collection.
-* The file `base-requirements.yml` specifies the uri and branch of the potos base collection.
-* Resources that are need and have to be installed for running roles specified in `runtime.yml` go to the file `requirements.yml`. To make use of of the potos role collection add it to `requirements.yml` as show in the following listing.
+* The `runtime.yml` specifies what roles are run `hourly` and `daily` by the triggers managed by the potos base collection.
+* The file `base-requirements.yml` specifies the URI and branch of the Potos base collection.
+* Resources that are need and have to be installed for running roles specified in `runtime.yml` go to the file `requirements.yml`. To make use of of the Potos role collection add it to `requirements.yml` as show in the following listing.
 
 ```yaml
 collections:
@@ -18,7 +18,7 @@ collections:
 ```
 
 ## Setting Wallpaper Example
-In this exemple we are going to set the wallpaper for all managed clients using the `projectpotos.roles.wallpaper` role.
+In this example we are going to set the wallpaper for all managed clients using the `projectpotos.roles.wallpaper` role.
 Create the missing files and folders in the specs repository as shown below.
 ```bash
 ├── base-requirements.yml
@@ -39,7 +39,7 @@ Copy the following content to `inventory/group_vars/all/wallpaper.yml` and and a
 ---
 wallpaper_images:
   - name: wallpaper_1
-    filename: /var/lib/potos/specs/files/wallpaper/<place your wallpaper picture filname here (e.g. my_wallpaper.jpg)>
+    filename: /var/lib/potos/specs/files/wallpaper/<place your wallpaper picture filename here (e.g. my_wallpaper.jpg)>
     options: zoom
     pcolor: "#1c2e5d"
     scolor: "#1c2e5d"
@@ -59,7 +59,7 @@ runtypes:
     - projectpotos.roles.wallpaper
 ```
 
-Commit the changes and push it to your specs repository. Then manully trigger a ansible pull on the client with:
+Commit the changes and push it to your specs repository. Then manually trigger a Ansible pull on the client with:
 
 ```bash
 potos-ansible-pull -r daily -v

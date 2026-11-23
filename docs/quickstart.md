@@ -1,16 +1,12 @@
----
-icon: lucide/rocket
----
-
 # Quickstart Guide
 
-## Install system dependencies
-### Installing docker
+## Install System Dependencies
+### Installing Docker
 
-Follow the [offical docker installation guide](https://docs.docker.com/engine/install) and add your user to the docker group.
+Follow the [official docker installation guide](https://docs.docker.com/engine/install) and add your user to the docker group.
 
-### Installing libvirt
-This is only needed for bootstraping and testing the iso installation in a VM
+### Installing Libvirt
+This is only needed for bootstrapping and testing the ISO installation in a VM
 === "Fedora"
 
     ```bash
@@ -21,7 +17,7 @@ This is only needed for bootstraping and testing the iso installation in a VM
     sudo apt install -y qemu-system libvirt-daemon-system virt-manager ovmf
     ```
 
-## Clone project
+## Clone Project
 ```bash
 git clone https://github.com/projectpotos/potos-iso-builder.git
 ```
@@ -29,7 +25,7 @@ git clone https://github.com/projectpotos/potos-iso-builder.git
 cd potos-iso-builder
 ```
 
-## Install build dependencies
+## Install Build Dependencies
 The main build tool used by the Potos-ISO-Builder is go-task.
 It can be installed follow the [offical installation guide](https://taskfile.dev/docs/installation) 
 
@@ -50,7 +46,7 @@ locale:
 ```
 
 ### Admin Password
-Generate a password for the potos admin user
+Generate a password for the Potos admin user
 ```bash
 openssl passwd -6
 ```
@@ -69,14 +65,14 @@ disk_encryption:
   init_password: <put you password here>
 ```
 
-## Build minimal Potos iso
+## Build minimal Potos ISO
 The Potos installation-iso will be created at the path `tests/output/potos-installer.iso` using this command:
 
 ```bash
 OUTPUT_DIR=tests/output task build
 ```
 
-A installation into a vm can be started with the this command:
+A installation into a VM can be started with the this command:
 
 ```bash
 task test:bootstrap
